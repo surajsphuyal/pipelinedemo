@@ -1,18 +1,27 @@
 pipeline {
   environment {
-    repo = "tutorbrijan/pipelinedemo"
+    repo = "surajphuyal/pipelinedemo"
   }
   agent any
   stages {
-    stage('Install Docker') {
+    stage('Docker Build') {
       steps {
-        sh 'ansible-playbook Ansible/dockerinstall.yaml'
+        sh 'docker build -t $repo:v$BUILD_NUMBER .'
       }
     }
-    stage('Deploy container') {
+    stage('Docker Push') {
       steps {
-        sh 'ansible-playbook Ansible/deploycontainer.yaml -e "image_name=$repo image_tag=v3"'
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerpassword', usernameVariable: 'dockeruser')]) {
+          sh 'docker login -u ${env.User} -p ${env.Password}'
+          sh 'docker push $repo:v$BUILD_NUMBER'
+        }
       }
     }
+    stage('Clean docker image') {
+      steps {
+        sh 'docker rmi $repo:v$BUILD_NUMBER'
+      }
+    }
+    
   }
 }
