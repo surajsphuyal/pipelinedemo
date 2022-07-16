@@ -12,7 +12,7 @@ pipeline {
     stage('Docker Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerpassword', usernameVariable: 'dockeruser')]) {
-          sh 'docker login -u ${env.User} -p ${env.Password}'
+          sh "docker login -u ${env.User} -p ${env.Password}"
           sh 'docker push $repo:v$BUILD_NUMBER'
         }
       }
