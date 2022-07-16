@@ -11,7 +11,7 @@ pipeline {
     }
     stage('Deploy Container') {
       steps {
-        sh 'ansible-playbook Ansible/deploycontainer.yaml -e "image_name=$repo image_tag=latest"'
+        sh 'ansible-playbook Ansible/deploycontainer.yaml -e "image_name=$repo image_tag=v3"'
       }
     }
     
