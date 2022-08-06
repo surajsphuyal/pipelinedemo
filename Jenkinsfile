@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    repo = "surajphuyal/pipelinedemo"
+    repo = "surajphuyal/demo"
   }
   agent any
   stages {
